@@ -24,6 +24,7 @@ public class Pattern {
         return patternName;
     }
 
+
     /**
      * Get the link of the pattern
      * @return the pattern's link
