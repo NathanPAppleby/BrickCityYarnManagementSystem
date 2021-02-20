@@ -62,7 +62,9 @@ public class Main {
                 i++;
             }
             else if(menuChoice == 4){
-                //TODO LOG USER OUT AND QUIT PROGRAM
+                System.out.println("Goodbye!");
+                //logout?
+                System.exit(0);
                 i++;
             }
             else{
