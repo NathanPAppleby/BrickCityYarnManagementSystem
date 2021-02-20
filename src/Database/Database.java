@@ -38,4 +38,31 @@ public class Database {
         }
         return false;
     }
+    public static boolean loginUser(String username, String password) throws SQLException {
+        Statement statement = null;
+        Connection connection = createConnection();
+        try {
+            statement = connection.createStatement();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        String getUserCredentials = "SELECT * FROM Users WHERE Username = \"" + username + "\"";
+        ResultSet userResultSet = null;
+        try {
+            userResultSet = statement.executeQuery(getUserCredentials);
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+        String userPass = "";
+        while (userResultSet.next()){
+            try {
+                userPass = userResultSet.getString("Password");
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        return userPass.equals(password);
+
+    }
 }

@@ -10,18 +10,34 @@ import Database.Database;
 
 public class Main {
     public static void main(String[] args) {
+        User currentUser = null;
         Scanner scan = new Scanner(System.in);
         System.out.println("Hello! Would you like to log in or sign up?");
         String input = scan.nextLine();
         int i = 0;
         while(i == 0){
             if (input.equals("log in")) {
-                //TODO USE LOG IN
+                System.out.println("\nEnter Username: ");
+                String username = scan.nextLine();
+                System.out.println("\nEnter Password: ");
+                String password = scan.nextLine();
+                boolean loginSuccessful = false;
+                try{
+                    loginSuccessful = Database.loginUser(username, password);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+                if(loginSuccessful){
+                    System.out.println("You have Successfully Logged In!");
+                }
+                else {
+                    System.out.println("Invalid Credentials!");
+                }
                 i++;
             } else if (input.equals("sign up")) {
-                System.out.println("\nEnter Username:\n");
+                System.out.println("\nEnter Username:");
                 String username = scan.nextLine();
-                System.out.println("\nEnter Password:\n");
+                System.out.println("\nEnter Password:");
                 String password = scan.nextLine();
                 try {
                     if(Database.createUser(username, password)){
