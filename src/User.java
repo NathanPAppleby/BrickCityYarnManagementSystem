@@ -10,13 +10,17 @@ public class User {
     // The ID of the user, unique
     private int ID;
 
+    //Nickname
+    private String nickname;
+
     /**
      *
      * @param name the user's name
      * @param ID the user's ID
      */
-    public User(String name, int ID)
+    public User(String name, int ID, String nickname)
     {
+        this.nickname = nickname;
         this.name = name;
         this.ID = ID;
     }
@@ -36,5 +40,11 @@ public class User {
     public int getID(){
         return ID;
     }
+
+    /**
+     * A function to get the user's nickname
+     * @return the user's nickname
+     */
+    public String getNickname(){return nickname;}
 
 }
