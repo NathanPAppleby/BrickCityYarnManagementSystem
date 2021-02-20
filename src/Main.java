@@ -5,6 +5,7 @@
  * @author Nate Appelby
  */
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
@@ -33,11 +34,12 @@ public class Main {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
+                    i++;
                 }
                 else {
                     System.out.println("Invalid Credentials!");
                 }
-                i++;
+
             } else if (input.equals("sign up")) {
                 System.out.println("\nEnter Username:");
                 String username = scan.nextLine();
@@ -65,33 +67,7 @@ public class Main {
 
         //TODO if login successful
         assert currentUser != null;
-        System.out.println(String.format("Hello %s! Welcome to the Brick City Yarn Management System.\n" +
-                "Please select a menu option by typing the number next to the option to be used!", currentUser.getNickname()));
-        System.out.println("(1) Check Yarn");
-        System.out.println("(2) Check Projects");
-        System.out.println("(3) Check Shopping Cart");
-        System.out.println("(4) Log out and Exit");
-        int menuChoice = scan.nextInt();
-        while (i == 0) {
-            if (menuChoice == 1) {
-
-                i++;
-            } else if (menuChoice == 2) {
-                //TODO LIST PROJECTS IN DATABASE, ADD OPTIONS FOR OPENING PROJECTS, MOVING THEM TO ANOTHER STATE, ADDING, OR DELETING, AND BACK TO MENU
-                i++;
-            } else if (menuChoice == 3) {
-                //TODO LIST PROJECT NAMES IN SHOPPING CART, ADD OPTIONS FOR OPENING PROJECTS TO CART, REMOVING FROM CART INTO ANOTHER QUEUE, AND BACK TO MENU
-                i++;
-            }
-            else if(menuChoice == 4){
-                System.out.println("Goodbye!");
-                //logout?
-                System.exit(0);
-                i++;
-            }
-            else{
-                System.out.println("I did not understand that. Please enter the number of the menu option you would like.");
-            }
-        }
+        InputHandler inputHandler = new InputHandler();
+        inputHandler.mainMenu(currentUser);
     }
 }

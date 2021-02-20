@@ -14,12 +14,12 @@ public class Yarn {
     private String brand;
 
     // The weight of the yarn
-    private float weight;
+    private int weight;
 
     // The amount of yarn;
-    private float amount;
+    private int amount;
 
-    public Yarn(String color, String brand, float weight, float amount){
+    public Yarn(String color, String brand, int weight, int amount){
         this.color = color;
         this.brand = brand;
         this.weight = weight;
@@ -48,7 +48,7 @@ public class Yarn {
      * Adds an amount of this kind of yarn
      * @param amount the amount to add
      */
-    public void addYarnAmount(float amount){
+    public void addYarnAmount(int amount){
         this.amount += amount;
     }
 
@@ -56,9 +56,11 @@ public class Yarn {
      * Removes an amount of this kind of yarn
      * @param amount the amount to remove
      */
-    public void removeYarnAmount(float amount){
+    public void removeYarnAmount(int amount){
         this.amount -= amount;
     }
+
+    public ArrayList<Yarn> getYarnList() { return yarnList; }
 
     public String getColor() {
         return color;
@@ -68,11 +70,15 @@ public class Yarn {
         return brand;
     }
 
-    public float getWeight() {
+    public int getWeight() {
         return weight;
     }
 
-    public float getAmount() {
+    public int getAmount() {
         return amount;
+    }
+
+    public String toString(){
+        return brand + " in color " + color + ", weight " + weight + ", amount " + amount + "\n";
     }
 }

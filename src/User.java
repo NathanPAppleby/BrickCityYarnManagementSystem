@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 /**
  * @author Nathan Appleby
  * @author Zackary Wake
@@ -12,6 +14,8 @@ public class User {
 
     //Nickname
     private String nickname;
+
+    private ArrayList<Yarn> yarnList = new ArrayList<>();
 
     /**
      *
@@ -45,6 +49,12 @@ public class User {
      * A function to get the user's nickname
      * @return the user's nickname
      */
-    public String getNickname(){return nickname;}
+    public String getNickname(){ return nickname; }
+
+    public ArrayList<Yarn> getYarnList(){ return yarnList; }
+
+    public void addYarnList(Yarn yarn){ yarnList.add(yarn); }
+
+    public void removeYarnList(Yarn yarn){ yarnList.remove(yarn); }
 
 }
