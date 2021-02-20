@@ -9,7 +9,7 @@ import java.util.Scanner;
 import Database.Database;
 
 public class Main {
-    public static void main() {
+    public static void main(String[] args) {
         Scanner scan = new Scanner(System.in);
         System.out.println("Hello! Would you like to log in or sign up?");
         String input = scan.nextLine();
