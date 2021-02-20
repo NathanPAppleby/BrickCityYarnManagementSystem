@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 /**
  * @author Nathan Appleby
  * @author Zackary Wake
@@ -24,11 +26,29 @@ public class Yarn {
         this.amount = amount;
     }
 
+    public ArrayList<Yarn> yarnList = new ArrayList<Yarn>();
+
+    /**
+     * Adds yarn to database/list
+     * @param yarn the yarn object, should already be created/have all info stored
+     */
+    public void addYarn(Yarn yarn){
+        yarnList.add(yarn);
+    }
+
+    /**
+     * Removes yarn from database/list
+     * @param yarn the yarn object
+     */
+    public void removeYarn(Yarn yarn){
+        yarnList.remove(yarn);
+    }
+
     /**
      * Adds an amount of this kind of yarn
      * @param amount the amount to add
      */
-    public void addYarn(float amount){
+    public void addYarnAmount(float amount){
         this.amount += amount;
     }
 
@@ -36,7 +56,7 @@ public class Yarn {
      * Removes an amount of this kind of yarn
      * @param amount the amount to remove
      */
-    public void useYarn(float amount){
+    public void removeYarnAmount(float amount){
         this.amount -= amount;
     }
 

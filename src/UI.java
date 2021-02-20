@@ -6,7 +6,7 @@ import java.util.Scanner;
  * @author Nate Appleby
  */
 public class UI {
-    public static void main(){
+    public static void runUI(){
         Scanner scan = new Scanner(System.in);
         System.out.println("Hello! Would you like to log in or sign up?");
         String input = scan.nextLine();
@@ -25,7 +25,8 @@ public class UI {
         i = 0;
 
         //TODO if login successful
-        System.out.println("Hello PLACEHOLDER! Please select a menu option by typing the number \n next to the option to be used!" );
+        System.out.println("Hello PLACEHOLDER! Welcome to the Brick City Yarn Management System.\n" +
+                "Please select a menu option by typing the number next to the option to be used!" );
         System.out.println("(1) Check Yarn");
         System.out.println("(2) Check Projects");
         System.out.println("(3) Check Shopping Cart");
@@ -33,7 +34,7 @@ public class UI {
         int menuChoice = scan.nextInt();
         while(i == 0){
             if(menuChoice == 1){
-                //TODO LIST YARN NAMES IN DATABASE, ADD OPTIONS FOR MORE DETAILS, ADDING, OR DELETING, AND BACK TO MENU
+
                 i++;
             }
             else if(menuChoice == 2){
@@ -52,6 +53,5 @@ public class UI {
                 System.out.println("I did not understand that. Please enter the number of the menu option you would like.");
             }
         }
-
     }
 }
