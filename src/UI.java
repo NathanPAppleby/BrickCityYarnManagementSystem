@@ -1,3 +1,5 @@
+import Database.Database;
+
 import java.util.Scanner;
 
 /* Class for the UI output, routes input to correct classes
@@ -16,7 +18,20 @@ public class UI {
                 //TODO USE LOG IN
                 i++;
             } else if (input.equals("sign up")) {
-                //TODO USE SIGN UP
+                System.out.println("\nEnter Username:\n");
+                String username = scan.nextLine();
+                System.out.println("\nEnter Password:\n");
+                String password = scan.nextLine();
+                try {
+                    if(Database.createUser(username, password)){
+                        System.out.println("User Registered Successfully!");
+                    }
+                    else{
+                        System.out.println("User Already Exists!");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 i++;
             } else {
                 System.out.println("I did not understand that. Please type \"log in\" or \"sign up\"");
