@@ -88,4 +88,5 @@ public class Database {
         }
         return new User(username, UID, nickname);
     }
+
 }
