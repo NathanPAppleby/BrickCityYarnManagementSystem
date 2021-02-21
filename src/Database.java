@@ -35,11 +35,9 @@ public class Database {
         if((usernameCheckResult.getInt(1) == 0)) {
             String createUserQuery = "INSERT INTO Users VALUES (\"" + username + "\", \"" + password + "\", " + UID + ",\"" + nickname + "\")";
             String createYarnTableQuery = "CREATE TABLE " + UID + "_Yarns (Color VARCHAR(100), Brand VARCHAR(100), Weight INTEGER, Amount INTEGER)";
-            String createProjectsTableQuery = "CREATE TABLE " + UID + "_Projects (Status VARCHAR(40), Pattern VARCHAR(100), Yarns_Required LONGTEXT";
-            String createPatternsTableQuery = "CREATE TABLE " + UID + "_Patterns (Link VARCHAR(120))";
+            String createProjectsTableQuery = "CREATE TABLE " + UID + "_Projects (Status VARCHAR(40), Pattern VARCHAR(100), Yarns_Required LONGTEXT)";
             String createShoppingCartTableQuery = "CREATE TABLE " + UID + "_ShoppingCart (Color VARCHAR(40), Brand VARCHAR(40), Weight INTEGER, Amount INTEGER)";
 
-            statement.executeUpdate(createPatternsTableQuery);
             statement.executeUpdate(createYarnTableQuery);
             statement.executeUpdate(createProjectsTableQuery);
             statement.executeUpdate(createUserQuery);
@@ -120,7 +118,7 @@ public class Database {
             e.printStackTrace();
         }
         String addYarnQuery = "INSERT INTO " + user.getID() + "_Yarns VALUES(\"" + yarn.getColor() +
-                "\", \"" + yarn.getBrand() + "\", " + yarn.getAmount() + ", " + yarn.getWeight();
+                "\", \"" + yarn.getBrand() + "\", " + yarn.getAmount() + ", " + yarn.getWeight() + ")";
         try {
             statement.executeUpdate(addYarnQuery);
         } catch (Exception e) {
