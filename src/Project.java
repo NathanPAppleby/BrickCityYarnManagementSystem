@@ -57,5 +57,13 @@ public class Project {
 
     public String getName(){ return name;}
 
-    public String toString(){ return name + ", pattern link: " + pattern + ", yarn needed: " + yarnNeeded.toString() + ", status: " + status + "\n"; }
+    public String yarnNeededToString() {
+        StringBuilder s = new StringBuilder();
+        for(Yarn f : yarnNeeded){
+            s.append(f.toString());
+        }
+        return s.toString();
+    }
+
+    public String toString(){ return name + "\npattern link: " + pattern + "\nyarn needed: \n" + yarnNeededToString() + "status: " + status + "\n"; }
 }
