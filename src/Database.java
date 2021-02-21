@@ -101,6 +101,9 @@ public class Database {
         for (Project p : getProjects(user)) {
             user.addProjectList(p);
         }
+        for (Yarn y : getYarnsInCart(user)) {
+            user.cartAdd(y);
+        }
         return user;
     }
 
@@ -340,7 +343,7 @@ public class Database {
                 break;
             }
         }
-        String changeProjectStatusQuery = String.format("UPDATE %d_Projects SET Status = \"%s\" WHERE Name = \"%s\")", user.getID(), newState, projectName);
+        String changeProjectStatusQuery = String.format("UPDATE %d_Projects SET Status = \"%s\" WHERE Name = \"%s\"", user.getID(), newState, projectName);
         try {
             statement = connection.createStatement();
             statement.executeUpdate(changeProjectStatusQuery);
@@ -348,6 +351,101 @@ public class Database {
             e.printStackTrace();
         }
 
+    }
+
+    public static void addYarnToCart(User user, Yarn yarn) {
+        Connection connection = createConnection();
+        Statement statement = null;
+        ResultSet rs = null;
+        try {
+            statement = connection.createStatement();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        String addYarnQuery = "INSERT INTO " + user.getID() + "_ShoppingCart VALUES(\"" + yarn.getColor() +
+                "\", \"" + yarn.getBrand() + "\", " + yarn.getWeight() + ", " + yarn.getAmount() + ")";
+        try {
+            statement.executeUpdate(addYarnQuery);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void updateYarninCartAmount(User user, Yarn yarn, String operation) {
+        Connection connection = createConnection();
+        Statement statement = null;
+        ResultSet rs = null;
+        String updateYarnAmountQuery = null;
+        int currentAmount = 0;
+        String getAmountQuery = String.format("SELECT * FROM %d_ShoppingCart WHERE Color = \"%s\" AND Brand = \"%s\" AND " +
+                "Weight = %d", user.getID(), yarn.getColor(), yarn.getBrand(), yarn.getWeight());
+        try {
+            statement = connection.createStatement();
+            rs = statement.executeQuery(getAmountQuery);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            while (rs.next()) {
+                currentAmount = rs.getInt("Amount");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (operation.equals("ADD")) {
+            updateYarnAmountQuery = String.format("UPDATE %d_ShoppingCart SET Amount = %d WHERE Color = \"%s\" AND" +
+                            " Brand = \"%s\" AND Weight = %d", user.getID(), (currentAmount + yarn.getAmount()), yarn.getColor(),
+                    yarn.getBrand(), yarn.getWeight());
+        } else if (operation.equals("REMOVE")) {
+            updateYarnAmountQuery = String.format("UPDATE %d_ShoppingCart SET Amount = %d WHERE Color = \"%s\" AND" +
+                            " Brand = \"%s\" AND Weight = %d", user.getID(), (currentAmount - yarn.getAmount()), yarn.getColor(),
+                    yarn.getBrand(), yarn.getWeight());
+        }
+        try {
+            statement.executeUpdate(updateYarnAmountQuery);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static ArrayList<Yarn> getYarnsInCart(User user) throws SQLException {
+        Connection connection = createConnection();
+        Statement statement = null;
+        ArrayList<Yarn> listOfYarns = new ArrayList<>();
+        ResultSet rs = null;
+        try {
+            statement = connection.createStatement();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        String getAllYarnQuery = "SELECT * FROM " + user.getID() + "_ShoppingCart";
+        try {
+            rs = statement.executeQuery(getAllYarnQuery);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        while (rs.next()) {
+            String color = rs.getString("Color");
+            String brand = rs.getString("Brand");
+            int weight = rs.getInt("Weight");
+            int amount = rs.getInt("Amount");
+            Yarn yarn = new Yarn(color, brand, weight, amount);
+            listOfYarns.add(yarn);
+        }
+        return listOfYarns;
+    }
+
+    public static void removeYarnFromCart(User user, Yarn yarn) {
+        Connection connection = createConnection();
+        Statement statement = null;
+        String removeYarnQuery = String.format("DELETE FROM %d_ShoppingCart WHERE Color = \"%s\" AND" +
+                " Brand = \"%s\" AND Weight = %d", user.getID(), yarn.getColor(), yarn.getBrand(), yarn.getWeight());
+        try {
+            statement = connection.createStatement();
+            statement.executeUpdate(removeYarnQuery);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

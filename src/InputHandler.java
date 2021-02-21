@@ -343,11 +343,13 @@ public class InputHandler {
         boolean b = false;
         if (currentUser.hasYarnInCart(yarn)) {
             currentUser.getYarnFromCart(yarn).addYarnAmount(amount);
+            Database.updateYarninCartAmount(currentUser, yarn, "ADD");
             System.out.println("Yarn already existed - added amount to cart!");
             b = true;
         }
         if (!b) {
             currentUser.cartAdd(yarn);
+            Database.addYarnToCart(currentUser, yarn);
             System.out.println("Yarn Added");
         }
     }
@@ -367,9 +369,11 @@ public class InputHandler {
         if (currentUser.hasYarnInCart(yarn)) {
             if (currentUser.getYarnFromCart(yarn).getAmount() - amount > 0) {
                 currentUser.getYarnFromCart(yarn).removeYarnAmount(amount);
+                Database.updateYarninCartAmount(currentUser, yarn, "REMOVE");
                 System.out.println("Yarn amount removed - amount remaining is " + currentUser.getYarnFromCart(yarn).getAmount());
                 v = true;
             } else {
+                Database.removeYarnFromCart(currentUser, yarn);
                 currentUser.cartRemove(currentUser.getYarnFromCart(yarn));
                 System.out.println("Yarn removed");
                 v = true;
@@ -389,6 +393,7 @@ public class InputHandler {
             if(projectName.equals(currentUser.getProjectList().get(f).getName())){
                 for(int u = 0; u < currentUser.getProjectList().get(f).getYarn().size(); u++){
                     currentUser.cartAdd(currentUser.getProjectList().get(f).getYarn().get(u));
+                    Database.addYarnToCart(currentUser, currentUser.getProjectList().get(f).getYarn().get(u));
                 }
                 System.out.println("Yarn from project " + currentUser.getProjectList().get(f).getName() + " added to cart");
                 v = true;
