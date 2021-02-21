@@ -35,7 +35,7 @@ public class Database {
         if((usernameCheckResult.getInt(1) == 0)) {
             String createUserQuery = "INSERT INTO Users VALUES (\"" + username + "\", \"" + password + "\", " + UID + ",\"" + nickname + "\")";
             String createYarnTableQuery = "CREATE TABLE " + UID + "_Yarns (Color VARCHAR(100), Brand VARCHAR(100), Weight INTEGER, Amount INTEGER)";
-            String createProjectsTableQuery = "CREATE TABLE " + UID + "_Projects (Status VARCHAR(40), Pattern VARCHAR(100), Yarns_Required LONGTEXT)";
+            String createProjectsTableQuery = "CREATE TABLE " + UID + "_Projects (Name VARCHAR(40), Status VARCHAR(40), Pattern VARCHAR(100), Yarns_Required LONGTEXT)";
             String createShoppingCartTableQuery = "CREATE TABLE " + UID + "_ShoppingCart (Color VARCHAR(40), Brand VARCHAR(40), Weight INTEGER, Amount INTEGER)";
 
             statement.executeUpdate(createYarnTableQuery);
@@ -97,6 +97,9 @@ public class Database {
         User user = new User(username, UID, nickname);
         for (Yarn y : getYarns(user)) {
             user.addYarnList(y);
+        }
+        for (Project p : getProjects(user)) {
+            user.addProjectList(p);
         }
         return user;
     }
@@ -183,6 +186,88 @@ public class Database {
         return listOfYarns;
     }
 
+    public static ArrayList<Project> getProjects(User user) {
+        Connection connection = createConnection();
+        Statement statement = null;
+        ArrayList<Project> listOfProjects = new ArrayList<>();
+        try {
+            statement = connection.createStatement();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        String getAllProjectsQuery = "SELECT * FROM " + user.getID() + "_Projects";
+        try {
+            ResultSet rs = statement.executeQuery(getAllProjectsQuery);
+            while (rs.next()) {
+                String name = rs.getString("Name");
+                String pattern = rs.getString("Pattern");
+                String yarn = rs.getString("Yarns_Required");
+                String status = rs.getString("Status");
+                ArrayList<Yarn> yarnNeeded = yarnStringToArray(yarn);
+                State projectStatus = null;
+                switch (status) {
+                    case "WIP": {
+                        projectStatus = State.WIP;
+                        break;
+                    }
+                    case "InQueue": {
+                        projectStatus = State.inQueue;
+                        break;
+                    }
+                    case "Complete": {
+                        projectStatus = State.complete;
+                        break;
+                    }
+                }
+                Project project = new Project(projectStatus, pattern, yarnNeeded, name);
+                listOfProjects.add(project);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return listOfProjects;
+    }
+
+    public static ArrayList<Yarn> yarnStringToArray(String string) {
+        String brand = null;
+        String color = null;
+        int weight = 0;
+        int amount = 0;
+        ArrayList<Yarn> yarnArray = new ArrayList<>();
+        string = string.substring(1, string.length() - 1);
+        string = string.replace(" weight ", "");
+        string = string.replace(" amount ", "");
+        string = string.replace("\n", "");
+        String[] split = string.split(",| in color");
+        for (int i = 0; i < split.length; i++) {
+            if (split[i].charAt(0) == ' ') {
+                split[i] = split[i].substring(1);
+            }
+            switch (i % 4) {
+                case 0: {
+                    brand = split[i];
+                    break;
+                }
+                case 1: {
+                    color = split[i];
+                    break;
+                }
+                case 2: {
+                    weight = Integer.parseInt(split[i]);
+                    break;
+                }
+                case 3: {
+                    amount = Integer.parseInt(split[i]);
+                    Yarn yarn = new Yarn(color, brand, weight, amount);
+                    yarnArray.add(yarn);
+                    break;
+                }
+            }
+
+        }
+        return yarnArray;
+    }
+
     public static void removeYarn(User user, Yarn yarn) {
         Connection connection = createConnection();
         Statement statement = null;
@@ -196,5 +281,73 @@ public class Database {
         }
     }
 
+    public static void addProject(User user, Project project) {
+        Connection connection = createConnection();
+        Statement statement;
+        String projectState = "";
+        State currentState = project.getStatus();
+        switch (currentState) {
+            case inQueue: {
+                projectState = "InQueue";
+                break;
+            }
+            case WIP: {
+                projectState = "WIP";
+                break;
+            }
+            case complete: {
+                projectState = "Complete";
+                break;
+            }
+        }
+        String addProjectQuery = String.format("INSERT INTO %d_Projects VALUES(\"%s\", \"%s\", \"%s\", \"%s\")", user.getID(),
+                project.getName(), projectState, project.getPattern(), project.getYarn());
+        try {
+            statement = connection.createStatement();
+            statement.executeUpdate(addProjectQuery);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void removeProject(User user, String projectName) {
+        Connection connection = createConnection();
+        Statement statement = null;
+        String removeYarnQuery = String.format("DELETE FROM %d_Projects WHERE Name = \"%s\"", user.getID(), projectName);
+        try {
+            statement = connection.createStatement();
+            statement.executeUpdate(removeYarnQuery);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void changeProjectStatus(State state, String projectName, User user) {
+        Connection connection = createConnection();
+        Statement statement = null;
+        String newState = "";
+        switch (state) {
+            case inQueue: {
+                newState = "InQueue";
+                break;
+            }
+            case WIP: {
+                newState = "WIP";
+                break;
+            }
+            case complete: {
+                newState = "Complete";
+                break;
+            }
+        }
+        String changeProjectStatusQuery = String.format("UPDATE %d_Projects SET Status = \"%s\" WHERE Name = \"%s\")", user.getID(), newState, projectName);
+        try {
+            statement = connection.createStatement();
+            statement.executeUpdate(changeProjectStatusQuery);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
 
 }

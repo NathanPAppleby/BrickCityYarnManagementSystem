@@ -241,6 +241,7 @@ public class InputHandler {
         }
         Project project = new Project(State.inQueue, pattern, yarnProjectList, name);
         currentUser.addProjectList(project);
+        Database.addProject(currentUser, project);
         System.out.println("Project added to queue.");
     }
 
@@ -252,6 +253,7 @@ public class InputHandler {
         for(int f = 0; f < currentUser.getProjectList().size(); f++){
             if(name.equals(currentUser.getProjectList().get(f).getName())){
                 currentUser.removeProjectList(currentUser.getProjectList().get(f));
+                Database.removeProject(currentUser, name);
                 System.out.println("Project removed");
                 v = true;
             }
@@ -272,12 +274,15 @@ public class InputHandler {
                 int c = scan.nextInt();
                 if(c == 1) {
                     currentUser.getProjectList().get(f).changeProjectStatus(currentUser.getProjectList().get(f), State.inQueue);
+                    Database.changeProjectStatus(State.inQueue, name, currentUser);
                 }
                 else if(c == 2){
                     currentUser.getProjectList().get(f).changeProjectStatus(currentUser.getProjectList().get(f), State.WIP);
+                    Database.changeProjectStatus(State.WIP, name, currentUser);
                 }
                 else if(c == 3){
                     currentUser.getProjectList().get(f).changeProjectStatus(currentUser.getProjectList().get(f), State.complete);
+                    Database.changeProjectStatus(State.complete, name, currentUser);
                 }
                 else{
                     System.out.println("I didn't understand that request.");
