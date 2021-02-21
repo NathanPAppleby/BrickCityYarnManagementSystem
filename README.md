@@ -1,5 +1,7 @@
 # yarnmanagementsystem
-Repo for yarn management system
+This is a system for knitters and crocheters alike to organize their yarn and projects in an easy to use way!
+## To Use
+To use, download all files and run Jar from command line
 ## Inspiration
 Our inspiration was team member Ella's struggle to keep all her 
 fiber art projects in one place, along with keeping track of her yarn.
