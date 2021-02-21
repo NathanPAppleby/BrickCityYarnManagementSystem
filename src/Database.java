@@ -110,17 +110,40 @@ public class Database {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        String checkForExistingYarnQuery = "SELECT COUNT(*) from " + user.getID() + "_Yarns WHERE Color = \"" +
-                yarn.getColor() + "\" AND Brand = \"" + yarn.getBrand() + "\" AND Weight = " + yarn.getWeight() + ";";
+        String addYarnQuery = "INSERT INTO " + user.getID() + "_Yarns VALUES(\"" + yarn.getColor() +
+                "\", \"" + yarn.getBrand() + "\", " + yarn.getWeight() + ", " + yarn.getAmount() + ")";
         try {
-            rs = statement.executeQuery(checkForExistingYarnQuery);
+            statement.executeUpdate(addYarnQuery);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        String addYarnQuery = "INSERT INTO " + user.getID() + "_Yarns VALUES(\"" + yarn.getColor() +
-                "\", \"" + yarn.getBrand() + "\", " + yarn.getAmount() + ", " + yarn.getWeight() + ")";
+    }
+
+    public static void updateYarnAmount(User user, Yarn yarn) {
+        Connection connection = createConnection();
+        Statement statement = null;
+        ResultSet rs = null;
+        int currentAmount = 0;
+        String getAmountQuery = String.format("SELECT * FROM %d_Yarns WHERE Color = \"%s\" AND Brand = \"%s\" AND " +
+                "Weight = %d", user.getID(), yarn.getColor(), yarn.getBrand(), yarn.getWeight());
         try {
-            statement.executeUpdate(addYarnQuery);
+            statement = connection.createStatement();
+            rs = statement.executeQuery(getAmountQuery);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            while (rs.next()) {
+                currentAmount = rs.getInt("Amount");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        String updateYarnAmountQuery = String.format("UPDATE %d_Yarns SET Amount = %d WHERE Color = \"%s\" AND" +
+                        " Brand = \"%s\" AND Weight = %d", user.getID(), (currentAmount + yarn.getAmount()), yarn.getColor(),
+                yarn.getBrand(), yarn.getWeight());
+        try {
+            statement.executeUpdate(updateYarnAmountQuery);
         } catch (Exception e) {
             e.printStackTrace();
         }

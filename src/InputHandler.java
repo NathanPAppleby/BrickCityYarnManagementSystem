@@ -86,20 +86,17 @@ public class InputHandler {
         amount = scan.nextInt();
         Yarn yarn = new Yarn(color, name, weight, amount);
         boolean b = false;
-        for(int f = 0; f < currentUser.getYarnList().size(); f++){
-            if (yarn == currentUser.getYarnList().get(f)) {
-                currentUser.getYarnList().get(f).addYarnAmount(amount);
-                System.out.println("Yarn already existed - added amount to storage!");
-                b = true;
-            }
+        if (currentUser.hasYarn(yarn)) {
+            currentUser.getYarn(yarn).addYarnAmount(amount);
+            Database.updateYarnAmount(currentUser, yarn);
+            System.out.println("Yarn already existed - added amount to storage!");
+            b = true;
         }
         if (!b) {
             currentUser.addYarnList(yarn);
             System.out.println("Yarn Added");
+            Database.addYarn(currentUser, yarn);
         }
-        currentUser.addYarnList(yarn);
-        Database.addYarn(currentUser, yarn);
-        System.out.println("Yarn Added");
     }
 
     public void removeYarnMenu(User currentUser){

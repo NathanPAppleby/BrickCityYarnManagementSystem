@@ -55,14 +55,45 @@ public class User {
 
     public ArrayList<Yarn> getYarnList(){ return yarnList; }
 
-    public void addYarnList(Yarn yarn){ yarnList.add(yarn); }
+    public void addYarnList(Yarn yarn) {
+        yarnList.add(yarn);
+    }
 
-    public void removeYarnList(Yarn yarn){ yarnList.remove(yarn); }
+    public void removeYarnList(Yarn yarn) {
+        yarnList.remove(yarn);
+    }
 
-    public void addProjectList(Project project){ projectList.add(project); }
+    public void addProjectList(Project project) {
+        projectList.add(project);
+    }
 
-    public void removeProjectList(Project project) { projectList.remove(project); }
+    public void removeProjectList(Project project) {
+        projectList.remove(project);
+    }
 
-    public ArrayList<Project> getProjectList(){ return projectList; }
+    public ArrayList<Project> getProjectList() {
+        return projectList;
+    }
+
+    public boolean hasYarn(Yarn yarn) {
+        boolean hasYarn = false;
+        for (Yarn y : yarnList) {
+            if ((y.getWeight() == yarn.getWeight()) &&
+                    (y.getBrand().equals(yarn.getBrand())) && (y.getColor().equals(yarn.getColor()))) {
+                hasYarn = true;
+            }
+        }
+        return hasYarn;
+    }
+
+    public Yarn getYarn(Yarn yarn) {
+        for (Yarn y : yarnList) {
+            if ((y.getWeight() == yarn.getWeight()) &&
+                    (y.getBrand().equals(yarn.getBrand())) && (y.getColor().equals(yarn.getColor()))) {
+                return y;
+            }
+        }
+        return null;
+    }
 
 }
