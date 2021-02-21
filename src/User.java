@@ -19,6 +19,8 @@ public class User {
 
     private ArrayList<Project> projectList = new ArrayList<>();
 
+    private ArrayList<Yarn> shoppingCart = new ArrayList<>();
+
     /**
      *
      * @param name the user's name
@@ -86,6 +88,17 @@ public class User {
         return hasYarn;
     }
 
+    public boolean hasYarnInCart(Yarn yarn){
+        boolean hasYarn = false;
+        for (Yarn y : shoppingCart) {
+            if ((y.getWeight() == yarn.getWeight()) &&
+                    (y.getBrand().equals(yarn.getBrand())) && (y.getColor().equals(yarn.getColor()))) {
+                hasYarn = true;
+            }
+        }
+        return hasYarn;
+    }
+
     public Yarn getYarn(Yarn yarn) {
         for (Yarn y : yarnList) {
             if ((y.getWeight() == yarn.getWeight()) &&
@@ -95,5 +108,21 @@ public class User {
         }
         return null;
     }
+
+    public Yarn getYarnFromCart(Yarn yarn){
+        for (Yarn y : shoppingCart) {
+            if ((y.getWeight() == yarn.getWeight()) &&
+                    (y.getBrand().equals(yarn.getBrand())) && (y.getColor().equals(yarn.getColor()))) {
+                return y;
+            }
+        }
+        return null;
+    }
+
+    public ArrayList<Yarn> getShoppingCart(){ return shoppingCart; }
+
+    public void cartAdd(Yarn yarn){ shoppingCart.add(yarn); }
+
+    public void cartRemove(Yarn yarn){ shoppingCart.remove(yarn); }
 
 }

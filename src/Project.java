@@ -51,8 +51,8 @@ public class Project {
         return pattern;
     }
 
-    public String getYarn() {
-        return yarnNeeded.toString();
+    public ArrayList<Yarn> getYarn() {
+        return yarnNeeded;
     }
 
     public String getName(){ return name;}

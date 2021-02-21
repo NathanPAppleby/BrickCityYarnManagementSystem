@@ -24,7 +24,7 @@ public class InputHandler {
 
         //Shopping Cart Menu
         else if (menuChoice == 3) {
-            //TODO LIST PROJECT NAMES IN SHOPPING CART, ADD OPTIONS FOR OPENING PROJECTS TO CART, REMOVING FROM CART INTO ANOTHER QUEUE, AND BACK TO MENU
+            cartMenu(currentUser);
             mainMenu(currentUser);
         }
 
@@ -285,6 +285,112 @@ public class InputHandler {
                 }
             }
         }
+    }
 
+    public void cartMenu(User currentUser){
+        Scanner scan = new Scanner(System.in);
+        System.out.println("Select a menu option for the Shopping Cart");
+        System.out.println("(1) Check Cart");
+        System.out.println("(2) Add Yarn to Cart");
+        System.out.println("(3) Remove Yarn from Cart");
+        System.out.println("(4) Add Yarn from Project to Cart");
+        System.out.println("(5) Back");
+        int choice = scan.nextInt();
+        if(choice == 1){
+            cartView(currentUser);
+            cartMenu(currentUser);
+        }
+        else if(choice == 2){
+            cartAdd(currentUser);
+            cartMenu(currentUser);
+        }
+        else if(choice == 3){
+            cartRemove(currentUser);
+            cartMenu(currentUser);
+        }
+        else if(choice == 4){
+            cartAddFromProject(currentUser);
+            cartMenu(currentUser);
+        }
+    }
+
+    public void cartView(User currentUser){
+        for(int f = 0; f < currentUser.getShoppingCart().size(); f++) {
+            System.out.println(currentUser.getShoppingCart().get(f) + "\n");
+        }
+    }
+
+    public void cartAdd(User currentUser){
+        Scanner scan = new Scanner(System.in);
+        String name = "";
+        String color = "";
+        int amount;
+        int weight;
+        System.out.println("Fill out yarn specifications below: \nYarn/Brand Name: ");
+        name = scan.nextLine().toLowerCase();
+        System.out.println("Yarn Color: ");
+        color = scan.nextLine().toLowerCase();
+        System.out.println("Yarn Weight: ");
+        weight = scan.nextInt();
+        System.out.println("Yarn Amount in Yards: ");
+        amount = scan.nextInt();
+        Yarn yarn = new Yarn(color, name, weight, amount);
+        boolean b = false;
+        if (currentUser.hasYarnInCart(yarn)) {
+            currentUser.getYarnFromCart(yarn).addYarnAmount(amount);
+            System.out.println("Yarn already existed - added amount to cart!");
+            b = true;
+        }
+        if (!b) {
+            currentUser.cartAdd(yarn);
+            System.out.println("Yarn Added");
+        }
+    }
+
+    public void cartRemove(User currentUser){
+        Scanner scan = new Scanner(System.in);
+        boolean v = false;
+        System.out.println("Please enter exact Yarn name: ");
+        String name = scan.nextLine().toLowerCase();
+        System.out.println("Enter exact color: ");
+        String color = scan.nextLine().toLowerCase();
+        System.out.println("Enter exact Weight: ");
+        int weight = scan.nextInt();
+        System.out.println("Enter amount to remove: ");
+        int amount = scan.nextInt();
+        Yarn yarn = new Yarn(color, name, weight, amount);
+        if (currentUser.hasYarnInCart(yarn)) {
+            if (currentUser.getYarnFromCart(yarn).getAmount() - amount > 0) {
+                currentUser.getYarnFromCart(yarn).removeYarnAmount(amount);
+                System.out.println("Yarn amount removed - amount remaining is " + currentUser.getYarnFromCart(yarn).getAmount());
+                v = true;
+            } else {
+                currentUser.cartRemove(currentUser.getYarnFromCart(yarn));
+                System.out.println("Yarn removed");
+                v = true;
+            }
+        }
+        if (!v) {
+            System.out.println("No yarns were found matching that name and color");
+        }
+    }
+
+    public void cartAddFromProject(User currentUser){
+        boolean v = false;
+        Scanner scan = new Scanner(System.in);
+        System.out.println("Enter project name: ");
+        String projectName = scan.nextLine();
+        for(int f = 0; f < currentUser.getProjectList().size(); f++){
+            if(projectName.equals(currentUser.getProjectList().get(f).getName())){
+                for(int u = 0; u < currentUser.getProjectList().get(f).getYarn().size(); u++){
+                    currentUser.cartAdd(currentUser.getProjectList().get(f).getYarn().get(u));
+                }
+                System.out.println("Yarn from project " + currentUser.getProjectList().get(f).getName() + " added to cart");
+                v = true;
+            }
+        }
+        if(!v){
+            System.out.println("No projects were found matching that name.");
+        }
     }
 }
