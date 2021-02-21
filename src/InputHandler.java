@@ -88,7 +88,7 @@ public class InputHandler {
         boolean b = false;
         if (currentUser.hasYarn(yarn)) {
             currentUser.getYarn(yarn).addYarnAmount(amount);
-            Database.updateYarnAmount(currentUser, yarn);
+            Database.updateYarnAmount(currentUser, yarn, "ADD");
             System.out.println("Yarn already existed - added amount to storage!");
             b = true;
         }
@@ -99,30 +99,32 @@ public class InputHandler {
         }
     }
 
-    public void removeYarnMenu(User currentUser){
+    public void removeYarnMenu(User currentUser) {
         Scanner scan = new Scanner(System.in);
         boolean v = false;
         System.out.println("Please enter exact Yarn name: ");
         String name = scan.nextLine().toLowerCase();
         System.out.println("Enter exact color: ");
         String color = scan.nextLine().toLowerCase();
+        System.out.println("Enter exact Weight: ");
+        int weight = scan.nextInt();
         System.out.println("Enter amount to remove: ");
         int amount = scan.nextInt();
-        for(int f = 0; f < currentUser.getYarnList().size(); f++){
-            if(name.equals(currentUser.getYarnList().get(f).getBrand()) && color.equals(currentUser.getYarnList().get(f).getColor())){
-                if(currentUser.getYarnList().get(f).getAmount() - amount > 0){
-                    currentUser.getYarnList().get(f).removeYarnAmount(amount);
-                    System.out.println("Yarn amount removed - amount remaining is " + currentUser.getYarnList().get(f).getAmount());
-                    v = true;
-                }
-                else {
-                    currentUser.removeYarnList(currentUser.getYarnList().get(f));
-                    System.out.println("Yarn removed");
-                    v = true;
-                }
+        Yarn yarn = new Yarn(color, name, weight, amount);
+        if (currentUser.hasYarn(yarn)) {
+            if (currentUser.getYarn(yarn).getAmount() - amount > 0) {
+                currentUser.getYarn(yarn).removeYarnAmount(amount);
+                Database.updateYarnAmount(currentUser, yarn, "REMOVE");
+                System.out.println("Yarn amount removed - amount remaining is " + currentUser.getYarn(yarn).getAmount());
+                v = true;
+            } else {
+                Database.removeYarn(currentUser, yarn);
+                currentUser.removeYarnList(currentUser.getYarn(yarn));
+                System.out.println("Yarn removed");
+                v = true;
             }
         }
-        if(!v){
+        if (!v) {
             System.out.println("No yarns were found matching that name and color");
         }
     }

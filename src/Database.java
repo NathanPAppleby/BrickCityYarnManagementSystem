@@ -119,10 +119,11 @@ public class Database {
         }
     }
 
-    public static void updateYarnAmount(User user, Yarn yarn) {
+    public static void updateYarnAmount(User user, Yarn yarn, String operation) {
         Connection connection = createConnection();
         Statement statement = null;
         ResultSet rs = null;
+        String updateYarnAmountQuery = null;
         int currentAmount = 0;
         String getAmountQuery = String.format("SELECT * FROM %d_Yarns WHERE Color = \"%s\" AND Brand = \"%s\" AND " +
                 "Weight = %d", user.getID(), yarn.getColor(), yarn.getBrand(), yarn.getWeight());
@@ -139,9 +140,15 @@ public class Database {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        String updateYarnAmountQuery = String.format("UPDATE %d_Yarns SET Amount = %d WHERE Color = \"%s\" AND" +
-                        " Brand = \"%s\" AND Weight = %d", user.getID(), (currentAmount + yarn.getAmount()), yarn.getColor(),
-                yarn.getBrand(), yarn.getWeight());
+        if (operation.equals("ADD")) {
+            updateYarnAmountQuery = String.format("UPDATE %d_Yarns SET Amount = %d WHERE Color = \"%s\" AND" +
+                            " Brand = \"%s\" AND Weight = %d", user.getID(), (currentAmount + yarn.getAmount()), yarn.getColor(),
+                    yarn.getBrand(), yarn.getWeight());
+        } else if (operation.equals("REMOVE")) {
+            updateYarnAmountQuery = String.format("UPDATE %d_Yarns SET Amount = %d WHERE Color = \"%s\" AND" +
+                            " Brand = \"%s\" AND Weight = %d", user.getID(), (currentAmount - yarn.getAmount()), yarn.getColor(),
+                    yarn.getBrand(), yarn.getWeight());
+        }
         try {
             statement.executeUpdate(updateYarnAmountQuery);
         } catch (Exception e) {
@@ -175,5 +182,19 @@ public class Database {
         }
         return listOfYarns;
     }
+
+    public static void removeYarn(User user, Yarn yarn) {
+        Connection connection = createConnection();
+        Statement statement = null;
+        String removeYarnQuery = String.format("DELETE FROM %d_Yarns WHERE Color = \"%s\" AND" +
+                " Brand = \"%s\" AND Weight = %d", user.getID(), yarn.getColor(), yarn.getBrand(), yarn.getWeight());
+        try {
+            statement = connection.createStatement();
+            statement.executeUpdate(removeYarnQuery);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
 }
