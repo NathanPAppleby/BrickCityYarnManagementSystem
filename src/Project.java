@@ -10,34 +10,19 @@ public class Project {
     // The state the project is in
     private State status;
 
+    private String name;
+
     // The pattern being created
-    private Pattern pattern;
+    private String pattern;
 
     // The yarn being used
-    private Yarn yarn;
+    private ArrayList<Yarn> yarnNeeded;
 
-    public Project(State status, Pattern pattern, Yarn yarn){
+    public Project(State status, String pattern, ArrayList<Yarn> yarnNeeded, String name){
         this.status = status;
         this.pattern = pattern;
-        this.yarn = yarn;
-    }
-
-    public ArrayList<Project> projectList = new ArrayList<>();
-
-    /**
-     * Adds project to arraylist
-     * @param p project to be added
-     */
-    public void addProject(Project p){
-        projectList.add(p);
-    }
-
-    /**
-     * Removes project from arraylist (not moving queue, removes from all queues totally)
-     * @param p project to be deleted
-     */
-    public void removeProject(Project p){
-        projectList.remove(p);
+        this.yarnNeeded = yarnNeeded;
+        this.name = name;
     }
 
     /**
@@ -62,11 +47,15 @@ public class Project {
         return status;
     }
 
-    public Pattern getPattern() {
+    public String getPattern() {
         return pattern;
     }
 
-    public Yarn getYarn() {
-        return yarn;
+    public String getYarn() {
+        return yarnNeeded.toString();
     }
+
+    public String getName(){ return name;}
+
+    public String toString(){ return name + ", pattern link: " + pattern + ", yarn needed: " + yarnNeeded.toString() + ", status: " + status + "\n"; }
 }

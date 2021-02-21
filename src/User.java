@@ -17,6 +17,8 @@ public class User {
 
     private ArrayList<Yarn> yarnList = new ArrayList<>();
 
+    private ArrayList<Project> projectList = new ArrayList<>();
+
     /**
      *
      * @param name the user's name
@@ -56,5 +58,11 @@ public class User {
     public void addYarnList(Yarn yarn){ yarnList.add(yarn); }
 
     public void removeYarnList(Yarn yarn){ yarnList.remove(yarn); }
+
+    public void addProjectList(Project project){ projectList.add(project); }
+
+    public void removeProjectList(Project project) { projectList.remove(project); }
+
+    public ArrayList<Project> getProjectList(){ return projectList; }
 
 }
