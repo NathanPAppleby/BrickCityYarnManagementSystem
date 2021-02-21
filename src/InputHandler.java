@@ -1,6 +1,3 @@
-import org.w3c.dom.ls.LSOutput;
-
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -90,16 +87,19 @@ public class InputHandler {
         Yarn yarn = new Yarn(color, name, weight, amount);
         boolean b = false;
         for(int f = 0; f < currentUser.getYarnList().size(); f++){
-            if(yarn == currentUser.getYarnList().get(f)){
+            if (yarn == currentUser.getYarnList().get(f)) {
                 currentUser.getYarnList().get(f).addYarnAmount(amount);
                 System.out.println("Yarn already existed - added amount to storage!");
                 b = true;
             }
         }
-        if(!b) {
+        if (!b) {
             currentUser.addYarnList(yarn);
             System.out.println("Yarn Added");
         }
+        currentUser.addYarnList(yarn);
+        Database.addYarn(currentUser, yarn);
+        System.out.println("Yarn Added");
     }
 
     public void removeYarnMenu(User currentUser){
@@ -221,7 +221,7 @@ public class InputHandler {
         String name = scan.nextLine().toLowerCase();
         System.out.println("Link to pattern: ");
         String pattern = scan.nextLine().toLowerCase();
-        System.out.println("Fill out yarn specifications below. Continue adding yarn until finished, when all yarn \nis added, enter a \'0\' for the Yarn Name: \n");
+        System.out.println("Fill out yarn specifications below. Continue adding yarn until finished, when all yarn \nis added, enter a '0' for the Yarn Name: \n");
         String brandname = "";
         boolean v = false;
         ArrayList<Yarn> yarnProjectList = new ArrayList<>();
