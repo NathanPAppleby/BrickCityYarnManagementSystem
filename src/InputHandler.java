@@ -288,7 +288,12 @@ public class InputHandler {
                     System.out.println("I didn't understand that request.");
                     projectStatusChange(currentUser);
                 }
+                v = true;
             }
+        }
+        if(!v){
+            System.out.println("I could not find that project.");
+            projectStatusChange(currentUser);
         }
     }
 
