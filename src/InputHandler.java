@@ -80,30 +80,49 @@ public class InputHandler {
         int amount;
         int weight;
         System.out.println("Fill out yarn specifications below: \nYarn/Brand Name: ");
-        name = scan.nextLine();
+        name = scan.nextLine().toLowerCase();
         System.out.println("Yarn Color: ");
-        color = scan.nextLine();
+        color = scan.nextLine().toLowerCase();
         System.out.println("Yarn Weight: ");
         weight = scan.nextInt();
         System.out.println("Yarn Amount in Yards: ");
         amount = scan.nextInt();
         Yarn yarn = new Yarn(color, name, weight, amount);
-        currentUser.addYarnList(yarn);
-        System.out.println("Yarn Added");
+        boolean b = false;
+        for(int f = 0; f < currentUser.getYarnList().size(); f++){
+            if(yarn == currentUser.getYarnList().get(f)){
+                currentUser.getYarnList().get(f).addYarnAmount(amount);
+                System.out.println("Yarn already existed - added amount to storage!");
+                b = true;
+            }
+        }
+        if(!b) {
+            currentUser.addYarnList(yarn);
+            System.out.println("Yarn Added");
+        }
     }
 
     public void removeYarnMenu(User currentUser){
         Scanner scan = new Scanner(System.in);
         boolean v = false;
         System.out.println("Please enter exact Yarn name: ");
-        String name = scan.nextLine();
+        String name = scan.nextLine().toLowerCase();
         System.out.println("Enter exact color: ");
-        String color = scan.nextLine();
+        String color = scan.nextLine().toLowerCase();
+        System.out.println("Enter amount to remove: ");
+        int amount = scan.nextInt();
         for(int f = 0; f < currentUser.getYarnList().size(); f++){
             if(name.equals(currentUser.getYarnList().get(f).getBrand()) && color.equals(currentUser.getYarnList().get(f).getColor())){
-                currentUser.removeYarnList(currentUser.getYarnList().get(f));
-                System.out.println("Yarn removed");
-                v = true;
+                if(currentUser.getYarnList().get(f).getAmount() - amount > 0){
+                    currentUser.getYarnList().get(f).removeYarnAmount(amount);
+                    System.out.println("Yarn amount removed - amount remaining is " + currentUser.getYarnList().get(f).getAmount());
+                    v = true;
+                }
+                else {
+                    currentUser.removeYarnList(currentUser.getYarnList().get(f));
+                    System.out.println("Yarn removed");
+                    v = true;
+                }
             }
         }
         if(!v){
@@ -199,20 +218,20 @@ public class InputHandler {
     public void projectAddList(User currentUser){
         Scanner scan = new Scanner(System.in);
         System.out.println("Fill out project template: \nProject Name: ");
-        String name = scan.nextLine();
+        String name = scan.nextLine().toLowerCase();
         System.out.println("Link to pattern: ");
-        String pattern = scan.nextLine();
+        String pattern = scan.nextLine().toLowerCase();
         System.out.println("Fill out yarn specifications below. Continue adding yarn until finished, when all yarn \nis added, enter a \'0\' for the Yarn Name: \n");
         String brandname = "";
         boolean v = false;
         ArrayList<Yarn> yarnProjectList = new ArrayList<>();
         while(!v) {
             System.out.println("Yarn/Brand Name: ");
-            brandname = scan.nextLine();
+            brandname = scan.nextLine().toLowerCase();
             if(brandname.equals("0"))
                 break;
             System.out.println("Yarn Color: ");
-            String color = scan.nextLine();
+            String color = scan.nextLine().toLowerCase();
             System.out.println("Yarn Weight: ");
             int weight = scan.nextInt();
             System.out.println("Yarn Amount in Yards: ");
@@ -230,7 +249,7 @@ public class InputHandler {
         Scanner scan = new Scanner(System.in);
         boolean v = false;
         System.out.println("Please enter exact project name to be removed: \n");
-        String name = scan.nextLine();
+        String name = scan.nextLine().toLowerCase();
         for(int f = 0; f < currentUser.getProjectList().size(); f++){
             if(name.equals(currentUser.getProjectList().get(f).getName())){
                 currentUser.removeProjectList(currentUser.getProjectList().get(f));
@@ -247,10 +266,10 @@ public class InputHandler {
         Scanner scan = new Scanner(System.in);
         boolean v = false;
         System.out.println("Please enter exact project name: \n");
-        String name = scan.nextLine();
+        String name = scan.nextLine().toLowerCase();
         for(int f = 0; f < currentUser.getProjectList().size(); f++){
             if(name.equals(currentUser.getProjectList().get(f).getName())){
-                System.out.println("What state would you like the project to be in?\n(1) Queue\n(2) WIP\n(3)");
+                System.out.println("What state would you like the project to be in?\n(1) Queue\n(2) WIP\n(3) Complete");
                 int c = scan.nextInt();
                 if(c == 1) {
                     currentUser.getProjectList().get(f).changeProjectStatus(currentUser.getProjectList().get(f), State.inQueue);
