@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v5.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v5.0": {
+      "YMS_CSharp/1.0.0": {
+        "runtime": {
+          "YMS_CSharp.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "YMS_CSharp/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
